@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c4467316b8fe2da4eb2eed06b9b7d92f, type: 3}
-  m_Name: WortelPedes
+  m_Name: Resiniresep2
   m_EditorClassIdentifier: 
   ingredients:
-  - {fileID: 11400000, guid: 8113d086c37e7354cb629f3a7b06a03a, type: 2}
   - {fileID: 11400000, guid: 1e1445be2298d87438d884221c72e469, type: 2}
-  cookedDish: {fileID: 11400000, guid: 9cd2346e6e6c4244a92779aec567982b, type: 2}
+  - {fileID: 11400000, guid: be3f2d5a587be9d4086a1f4c5869c530, type: 2}
+  cookedDish: {fileID: 11400000, guid: 08f3f5ad84dfa7f4e8930a6894151a47, type: 2}
   cookingTime: 5

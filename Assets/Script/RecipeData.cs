@@ -16,5 +16,8 @@ public class RecipeData : ScriptableObject
     public ItemData cookedDish;
     // Waktu yang dibutuhkan untuk memasak (dalam detik).
     public float cookingTime = 5f;
+
+    [Header("Nilai")]
+    public int scoreValue = 10;
 }
 

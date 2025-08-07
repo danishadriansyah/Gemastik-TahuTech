@@ -4,6 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Mengelola logika untuk sebuah piring yang bisa diisi, dipegang, dan disajikan.
+/// Versi ini tidak lagi menangani respawn-nya sendiri.
 /// </summary>
 public class PlateStation : MonoBehaviour
 {
@@ -29,18 +30,13 @@ public class PlateStation : MonoBehaviour
     /// </summary>
     public void Interact(PlayerInteract player)
     {
-        // Jika piring kosong, buka UI untuk menaruh masakan.
         if (!isFilled)
         {
-            // Buka UI Plating, hanya tampilkan masakan jadi dari inventory.
             PlatingUIManager.instance.OpenPlatingUI(this);
         }
-        // Jika piring terisi dan player tidak sedang memegang apa-apa.
         else if (isFilled && !player.IsHoldingObject())
         {
-            // Player mengambil piring ini.
             player.HoldObject(this.gameObject);
-            // Nonaktifkan collider agar tidak bisa di-klik saat dipegang.
             GetComponent<Collider2D>().enabled = false;
         }
     }
@@ -50,8 +46,6 @@ public class PlateStation : MonoBehaviour
     /// </summary>
     public void FillPlate(ItemData dish)
     {
-        // Pastikan yang dimasukkan adalah masakan jadi (bukan bahan mentah).
-        // Anda bisa menambahkan pengecekan tipe item di ItemData jika perlu.
         isFilled = true;
         heldDish = dish;
         spriteRenderer.sprite = filledSprite; // Ganti sprite menjadi terisi
@@ -59,23 +53,12 @@ public class PlateStation : MonoBehaviour
     }
 
     /// <summary>
-    /// Memulai proses untuk respawn.
+    /// Method publik yang dipanggil dari luar untuk mereset dan mengaktifkan piring.
     /// </summary>
-    public void StartRespawn()
+    public void ResetAndReactivate()
     {
-        StartCoroutine(RespawnAfterDelay(2f));
-    }
-
-    private IEnumerator RespawnAfterDelay(float delay)
-    {
-        // Tunggu selama durasi yang ditentukan.
-        yield return new WaitForSeconds(delay);
-
-        // Pindahkan piring kembali ke posisi awal.
         transform.position = originalPosition;
-        // Reset semua statusnya.
         ResetPlate();
-        // Aktifkan kembali agar bisa digunakan.
         gameObject.SetActive(true);
     }
 
@@ -88,5 +71,10 @@ public class PlateStation : MonoBehaviour
         heldDish = null;
         spriteRenderer.sprite = emptySprite;
         GetComponent<Collider2D>().enabled = true;
+    }
+
+    public ItemData GetHeldDish()
+    {
+        return heldDish;
     }
 }

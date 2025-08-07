@@ -2,29 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Ditempatkan pada area penyajian (kotak hijau).
-/// </summary>
 public class ServeStation : MonoBehaviour
 {
-    /// <summary>
-    /// Dipanggil saat player berinteraksi dengan area ini.
-    /// </summary>
     public void Serve(GameObject servedPlate)
     {
-        Debug.Log("Masakan berhasil disajikan!");
+        PlateStation plateScript = servedPlate.GetComponent<PlateStation>();
+        if (plateScript == null) return;
 
-        // Dapatkan komponen PlateStation dari piring yang disajikan.
-        PlateStation plate = servedPlate.GetComponent<PlateStation>();
-        if (plate != null)
+        // Dapatkan data masakan dari piring.
+        ItemData servedDish = plateScript.GetHeldDish();
+
+        // Jika ada masakan di piring...
+        if (servedDish != null)
         {
-            // Mulai proses respawn untuk piring tersebut.
-            plate.StartRespawn();
+            // LAPORKAN ke OrderManager untuk dicek.
+            OrderManager.instance.CheckServedDish(servedDish);
         }
 
-        // Sembunyikan piring yang sudah disajikan.
+        // Sembunyikan piring dan mulai proses respawn.
         servedPlate.SetActive(false);
+        StartCoroutine(RespawnPlateCoroutine(servedPlate, 5f)); // Anda bisa ubah waktunya
+    }
 
-        // Di sini kamu bisa menambahkan logika skor, uang, atau kepuasan pelanggan.
+    private IEnumerator RespawnPlateCoroutine(GameObject plateToRespawn, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        PlateStation plateScript = plateToRespawn.GetComponent<PlateStation>();
+        if (plateScript != null)
+        {
+            plateScript.ResetAndReactivate();
+        }
     }
 }
